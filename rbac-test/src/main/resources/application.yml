@@ -1,0 +1,11 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: security-jdbc
+  profiles:
+    active: mybatis, jdbc
+security-rbac:
+  rbac-user-class-str: org.crf.security.test.rbac.pojo.User
+  auto-create-root-account: true
+  uri-prefix: /api/rbac/
