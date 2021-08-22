@@ -1,7 +1,5 @@
 ## spring-security-rbac
 
-[GitHub](https://github.com/churunfa/spring-security-rbac.git)
-
 # 安装运行
 1.将项目导入idea，将spring-boot-security-rbac-starter-autoconfigure install到本地maven仓库
 
