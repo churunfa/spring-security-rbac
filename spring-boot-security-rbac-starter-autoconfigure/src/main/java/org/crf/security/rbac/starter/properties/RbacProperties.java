@@ -13,9 +13,7 @@ public class RbacProperties {
     private boolean autoCreateRootAccount = true;
     private Long tokenExpiration = 15 * 24 * 60 * 60 * 1000L;
     private String uriPrefix = "";
-    private String autoTypePath = null;
     private String[] authWhitelist = new String[0];
-    private String loginUri = "/api/login";
 
     public boolean isAutoCreateRootAccount() {
         return autoCreateRootAccount;
@@ -57,28 +55,12 @@ public class RbacProperties {
         this.uriPrefix = uriPrefix;
     }
 
-    public String getAutoTypePath() {
-        return autoTypePath;
-    }
-
-    public void setAutoTypePath(String autoTypePath) {
-        this.autoTypePath = autoTypePath;
-    }
-
     public String[] getAuthWhitelist() {
         return authWhitelist;
     }
 
     public void setAuthWhitelist(String[] authWhitelist) {
         this.authWhitelist = authWhitelist;
-    }
-
-    public String getLoginUri() {
-        return loginUri;
-    }
-
-    public void setLoginUri(String loginUri) {
-        this.loginUri = loginUri;
     }
 
     public Class getRbacUserClass() {

@@ -1,10 +1,12 @@
 package org.crf.security.rbac.starter.service.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import org.crf.security.rbac.starter.dao.RbacUserSecurityDao;
 import org.crf.security.rbac.starter.properties.RbacProperties;
 import org.crf.security.rbac.starter.service.rbac.RbacService;
 import org.crf.security.rbac.starter.user.RbacUser;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.parser.Entity;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -63,19 +66,19 @@ public class DefaultAuAuthRule {
                 continue;
             }
 
-            if (p.startsWith("GET:") && !"GET".equals(httpMethod)) {
+            if (p.startsWith("GET:") && !"GET".equalsIgnoreCase(httpMethod)) {
                 continue;
             }
 
-            if (p.startsWith("POST:") && !"POST".equals(httpMethod)) {
+            if (p.startsWith("POST:") && !"POST".equalsIgnoreCase(httpMethod)) {
                 continue;
             }
 
-            if (p.startsWith("PUT:") && !"PUT".equals(httpMethod)) {
+            if (p.startsWith("PUT:") && !"PUT".equalsIgnoreCase(httpMethod)) {
                 continue;
             }
 
-            if (p.startsWith("DELETE:") && !"DELETE".equals(httpMethod)) {
+            if (p.startsWith("DELETE:") && !"DELETE".equalsIgnoreCase(httpMethod)) {
                 continue;
             }
 
@@ -108,11 +111,35 @@ public class DefaultAuAuthRule {
 
             Map<String, String> map = paramParse(paramStr);
 
+
+            boolean isJson = false;
+            Map<String, Object> loginData = null;
+            if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType()) || MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType()) || MediaType.APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(request.getContentType())) {
+                isJson = true;
+                try {
+                    loginData = new ObjectMapper().readValue(request.getInputStream(), Map.class);
+                } catch (IOException e) {}
+            }
+
             boolean flag = true;
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-                String parameter = request.getParameter(key);
+                String parameter = null;
+
+                if (isJson && loginData != null && loginData.get(key) != null) {
+                    parameter = loginData.get(key).toString();
+                }
+
+                if (parameter == null) {
+                    parameter = request.getParameter(key);
+                }
+                if (parameter != null) {
+                    parameter = parameter.trim();
+                    if (parameter.length() == 0) {
+                        parameter = null;
+                    }
+                }
                 if (value == null) {
                     if (parameter != null) {
                         continue;
@@ -127,7 +154,6 @@ public class DefaultAuAuthRule {
                 }
 
             }
-
             if (flag) {
                 return true;
             }

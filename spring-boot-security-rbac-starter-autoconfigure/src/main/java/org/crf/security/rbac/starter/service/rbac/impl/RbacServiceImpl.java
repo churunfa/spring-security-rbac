@@ -136,7 +136,7 @@ public class RbacServiceImpl implements RbacService {
 
     @Override
     public int grantUserRole(int uid, int rid) throws RoleNotFoundException, RoleError {
-        String key = "rbac::authorities" + uid;
+        String key = "rbac::authorities::" + uid;
         redisTemplate.delete(key);
 
         Role role = roleMapper.getRoleById(rid);
@@ -159,8 +159,10 @@ public class RbacServiceImpl implements RbacService {
 
     @Override
     public int grantRolePermission(int rid, int pid) throws PermissionNotFoundException, RoleNotFoundException {
-
         Permission permission = permissionMapper.getPermissionById(pid);
+
+        Set<String> keys = redisTemplate.keys("rbac::authorities::" + "*");
+        redisTemplate.delete(keys);
 
         if (permission == null) {
             throw new PermissionNotFoundException("权限不存在");
@@ -202,6 +204,8 @@ public class RbacServiceImpl implements RbacService {
 
     @Override
     public int cancelUserPermission(int uid, int pid) throws PermissionNotFoundException {
+        Set<String> keys = redisTemplate.keys("rbac::authorities::" + "*");
+        redisTemplate.delete(keys);
         Permission permission = permissionMapper.getPermissionById(pid);
 
         if (permission == null) {
@@ -213,7 +217,7 @@ public class RbacServiceImpl implements RbacService {
 
     @Override
     public int cancelUserRole(int uid, int rid) throws RoleNotFoundException, AnonymousRoleDeleteException {
-        String key = "rbac::authorities" + uid;
+        String key = "rbac::authorities::" + uid;
         redisTemplate.delete(key);
         Role role = roleMapper.getRoleById(rid);
         if (role == null) {
@@ -229,6 +233,8 @@ public class RbacServiceImpl implements RbacService {
 
     @Override
     public int cancelRolePermission(int rid, int pid) throws PermissionNotFoundException {
+        Set<String> keys = redisTemplate.keys("rbac::authorities::" + "*");
+        redisTemplate.delete(keys);
         Permission permission = permissionMapper.getPermissionById(pid);
 
         if (permission == null) {
@@ -309,7 +315,7 @@ public class RbacServiceImpl implements RbacService {
     @Override
 //    @Cacheable(value = "rbac::authorities", condition = "#id > 0")
     public Collection<? extends GrantedAuthority> getAuthorities(int id) {
-        String key = "rbac::authorities" + id;
+        String key = "rbac::authorities::" + id;
         String resJson = (String) redisTemplate.opsForValue().get(key);
         if (resJson != null) {
             List<Map> list = JSON.parseObject(resJson, List.class);

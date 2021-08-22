@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // -- swagger ui
             "/swagger-resources/**",
             "/swagger-ui.html",
+            "/swagger-ui/**",
             "/v2/api-docs",
             "/webjars/**",
             "/v3/api-docs"
@@ -84,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     LoginFilter loginFilter() throws Exception {
         LoginFilter filter = new LoginFilter(tokenManager, rbacService);
-        filter.setFilterProcessesUrl(rbacProperties.getLoginUri());
+        filter.setFilterProcessesUrl("/api/login");
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }

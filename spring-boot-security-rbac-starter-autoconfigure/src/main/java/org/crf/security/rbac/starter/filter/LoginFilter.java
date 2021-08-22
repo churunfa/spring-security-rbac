@@ -58,8 +58,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     password = "";
                 }
                 username = username.trim();
-                System.out.println(username);
-                System.out.println(password);
                 UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                         username, password);
                 setDetails(request, authRequest);
