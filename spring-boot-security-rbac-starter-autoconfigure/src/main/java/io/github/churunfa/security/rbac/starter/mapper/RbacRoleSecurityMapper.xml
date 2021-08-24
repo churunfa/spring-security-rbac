@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.churunfa.security.rbac.starter.mapper.RbacRoleSecurityMapper">
+
+    <resultMap id="roleMap" type="io.github.churunfa.security.rbac.starter.user.Role">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="resource" property="resource"/>
+        <result column="describe" property="describe"/>
+    </resultMap>
+
+    <select id="listRole" resultMap="roleMap">
+        select * from role
+    </select>
+
+    <select id="getRoleById" resultMap="roleMap">
+        select * from `role` where id = #{rid}
+    </select>
+
+    <select id="getRoleByName" resultMap="roleMap">
+        select * from `role` where name = #{name}
+    </select>
+
+    <insert id="insertRole" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into `role`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">`name`,</if>
+            <if test="resource != null">`resource`,</if>
+            <if test="describe != null">`describe`</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="resource != null">#{resource},</if>
+            <if test="describe != null">#{describe}</if>
+        </trim>
+    </insert>
+
+    <update id="updateRole">
+        update `role`
+        <set>
+            <if test="name != null">`name`=#{name},</if>
+            <if test="resource != null">`resource`=#{resource},</if>
+            <if test="describe != null">`describe`=#{describe}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="countRoleOnUser" resultType="int">
+        select count(*) from `user_permission_role` where `type` = 'role' and `permission_role_id` = #{rid} and `enabled` = 1
+    </select>
+
+    <select id="countRoleOnPermission" resultType="int">
+        select count(*) from `role_permission` where `role_id` = #{rid} and `enabled` = 1
+    </select>
+
+    <delete id="deleteRole">
+        delete from `role` where id = #{rid}
+    </delete>
+
+    <delete id="deleteRoleByName">
+        delete from `role` where name = #{name}
+    </delete>
+
+    <select id="listUserRole" resultMap="roleMap">
+        select permission_role_id as id, `name`, resource, `describe` from user_permission_role where user_id = #{uid} and type = 'role' and enabled = 1
+    </select>
+
+    <select id="listRidByPid" resultType="int">
+        select role_id from role_permission where permission_id = #{id} and enabled = 1
+    </select>
+</mapper>

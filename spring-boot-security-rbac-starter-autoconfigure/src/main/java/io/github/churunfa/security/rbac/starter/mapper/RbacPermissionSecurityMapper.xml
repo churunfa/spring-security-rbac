@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.churunfa.security.rbac.starter.mapper.RbacPermissionSecurityMapper">
+
+    <resultMap id="permissionMap" type="io.github.churunfa.security.rbac.starter.user.Permission">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="resource" property="resource"/>
+        <result column="describe" property="describe"/>
+    </resultMap>
+
+    <resultMap id="permissionRoleMap" type="io.github.churunfa.security.rbac.starter.user.Permission">
+        <result column="permission_id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="resource" property="resource"/>
+        <result column="describe" property="describe"/>
+    </resultMap>
+
+    <select id="getPermissionById" resultMap="permissionMap">
+        select * from `permission` where id = #{id}
+    </select>
+
+    <select id="getPermissionByName" resultMap="permissionMap">
+        select * from `permission` where name = #{name}
+    </select>
+
+    <insert id="insertPermission" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into `permission`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">`name`,</if>
+            <if test="resource != null">`resource`,</if>
+            <if test="describe != null">`describe`</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="resource != null">#{resource},</if>
+            <if test="describe != null">#{describe}</if>
+        </trim>
+    </insert>
+
+    <select id="checkPermissionByUidAndPid" resultType="int">
+        select count(*) from `user_permission_role` where user_id = #{uid} and type = 'permission' and permission_role_id = #{pid}
+    </select>
+
+    <insert id="insertPermissionInUser">
+        insert into `user_permission_role`(
+        <trim suffixOverrides=",">
+            `user_id`, `permission_role_id`, `name`,`type`,
+            <if test="permission.resource != null">`resource`,</if>
+            <if test="permission.describe != null">`describe`</if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            #{uid}, #{permission.id}, #{permission.name}, 'permission',
+            <if test="permission.resource != null">#{permission.resource},</if>
+            <if test="permission.describe != null">#{permission.describe}</if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updatePermissionInUser">
+        update `user_permission_role`
+        <set>
+            <if test="permission.name != null">`name`=#{permission.name},</if>
+            <if test="permission.resource != null">`resource`=#{permission.resource},</if>
+            <if test="permission.describe != null">`describe`=#{permission.describe},</if>
+            `enabled` = 1
+        </set>
+        where `user_id` = #{uid} and `permission_role_id` = #{permission.id}
+    </update>
+
+    <select id="checkRoleByUidAndRid" resultType="int">
+        select count(*) from `user_permission_role` where user_id = #{uid} and type = 'role' and permission_role_id = #{rid}
+    </select>
+
+    <insert id="insertRoleInUser">
+        insert into `user_permission_role`(
+        <trim suffixOverrides=",">
+            `user_id`, `permission_role_id`, `name`,`type`,
+            <if test="role.resource != null">`resource`,</if>
+            <if test="role.describe != null">`describe`</if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            #{uid}, #{role.id}, #{role.name}, 'role',
+            <if test="role.resource != null">#{role.resource},</if>
+            <if test="role.describe != null">#{role.describe}</if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateRoleInUser">
+        update `user_permission_role`
+        <set>
+            <if test="role.name != null">`name`=#{role.name},</if>
+            <if test="role.resource != null">`resource`=#{role.resource},</if>
+            <if test="role.describe != null">`describe`=#{role.describe},</if>
+            `enabled` = 1
+        </set>
+        where `user_id` = #{uid} and `permission_role_id` = #{role.id}
+    </update>
+
+    <update id="deletePermissionInUser">
+        update `user_permission_role` set `enabled` = 0 where user_id = #{uid} and type = 'permission' and permission_role_id = #{pid}
+    </update>
+
+    <select id="checkPermissionByUidAndRid" resultType="int">
+        select count(*) from `user_permission_role` where user_id = #{uid} and type = 'role' and permission_role_id = #{rid}
+    </select>
+
+    <select id="checkPermissionInRole" resultType="int">
+        select count(*) from `role_permission` where role_id = #{rid} and permission_id = #{pid}
+    </select>
+
+    <insert id="insertPermissionInRole">
+        insert into `role_permission`(
+        <trim suffixOverrides=",">
+            `role_id`, `permission_id`, `name`,
+            <if test="permission.resource != null">`resource`,</if>
+            <if test="permission.describe != null">`describe`</if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            #{rid}, #{permission.id}, #{permission.name},
+            <if test="permission.resource != null">#{permission.resource},</if>
+            <if test="permission.describe != null">#{permission.describe}</if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updatePermissionInRole">
+        update `role_permission`
+        <set>
+            <if test="permission.name != null">`name`=#{permission.name},</if>
+            <if test="permission.resource != null">`resource`=#{permission.resource},</if>
+            <if test="permission.describe != null">`describe`=#{permission.describe},</if>
+            `enabled` = 1
+        </set>
+        where `role_id` = #{rid} and `permission_id` = #{permission.id}
+    </update>
+
+    <update id="deletePermissionInRole">
+        update `role_permission` set `enabled` = 0 where role_id = #{rid} and permission_id = #{pid}
+    </update>
+
+    <update id="updatePermission">
+        update `permission`
+            <set>
+                <if test="name != null">`name`=#{name},</if>
+                <if test="resource != null">`resource`=#{resource},</if>
+                <if test="describe != null">`describe`=#{describe}</if>
+            </set>
+        where id=#{id}
+    </update>
+
+    <select id="countPermission" resultType="int">
+        select count(*) from permission
+    </select>
+
+    <select id="countPermissionLikeName" resultType="int">
+        select count(*) from permission where `name` like concat(#{name}, '%')
+    </select>
+
+    <select id="countPermissionOnUser" resultType="int">
+        select count(*) from `user_permission_role` where `type` = 'permission' and `permission_role_id` = #{pid} and `enabled` = 1
+    </select>
+
+    <select id="countPermissionOnRole" resultType="int">
+        select count(*) from `role_permission` where `permission_id` = #{pid} and enabled = 1
+    </select>
+
+    <select id="countPermissionLikeRole" resultType="int">
+        select count(*) from role_permission left join role on role.id = role_permission.role_id where role.name like concat(#{name}, '%') and `enabled` = 1
+    </select>
+
+    <delete id="deletePermission">
+        delete from `permission` where id = #{pid}
+    </delete>
+
+    <delete id="deletePermissionByName">
+        delete from `permission` where name = #{name}
+    </delete>
+
+    <update id="deleteRoleOnUser">
+        update `user_permission_role` set `enabled` = 0 where user_id = #{uid} and type = 'role' and permission_role_id = #{rid}
+    </update>
+
+    <select id="listUserPermission" resultMap="permissionMap">
+        select permission_role_id as id, `name`, resource, `describe` from user_permission_role where user_id = #{uid} and type = 'permission' and enabled = 1
+    </select>
+
+    <select id="listRolePermission" resultMap="permissionMap">
+        select permission_id as id, name, resource, `describe` from `role_permission` where role_id = #{rid} and enabled = 1
+    </select>
+
+    <select id="listPermission" resultMap="permissionMap">
+        select * from permission limit #{st}, #{limit}
+    </select>
+
+    <select id="listPermissionLikeName" resultMap="permissionMap">
+        select * from permission where `name` like concat(#{name}, '%') limit #{st}, #{limit}
+    </select>
+
+    <select id="listPermissionLikeRole" resultMap="permissionRoleMap">
+        select role_permission.* from role_permission left join role on role.id = role_permission.role_id where role.name like concat(#{role}, '%')  and `enabled` = 1 limit #{st}, #{limit}
+    </select>
+</mapper>

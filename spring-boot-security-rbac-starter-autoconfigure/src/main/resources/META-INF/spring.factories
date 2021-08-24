@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.crf.security.rbac.starter.autoconfiguration.SecurityConfig
+io.github.churunfa.security.rbac.starter.autoconfiguration.SecurityConfig
