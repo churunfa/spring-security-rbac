@@ -1,6 +1,6 @@
-package org.crf.security.test.rbac.pojo;
+package io.github.churunfa.security.test.rbac.pojo;
 
-import org.crf.security.rbac.starter.user.RbacUser;
+import io.github.churunfa.security.rbac.starter.user.RbacUser;
 
 /**
  * @author crf

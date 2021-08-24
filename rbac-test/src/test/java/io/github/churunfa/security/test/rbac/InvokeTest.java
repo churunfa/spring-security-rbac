@@ -1,14 +1,13 @@
-package org.crf.security.test.rbac;
+package io.github.churunfa.security.test.rbac;
 
-import org.crf.security.rbac.starter.service.security.DefaultAuAuthRule;
-import org.crf.security.rbac.starter.user.RbacUser;
+import io.github.churunfa.security.rbac.starter.service.security.DefaultAuAuthRule;
+import io.github.churunfa.security.rbac.starter.user.RbacUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

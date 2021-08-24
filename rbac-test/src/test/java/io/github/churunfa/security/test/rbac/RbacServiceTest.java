@@ -1,12 +1,12 @@
-package org.crf.security.test.rbac;
+package io.github.churunfa.security.test.rbac;
 
-import org.crf.security.test.rbac.pojo.User;
-import org.crf.security.utils.PageBean;
+import io.github.churunfa.security.test.rbac.pojo.User;
+import io.github.churunfa.security.utils.PageBean;
 import org.junit.jupiter.api.Test;
-import org.crf.security.exception.rbac.*;
-import org.crf.security.rbac.starter.service.rbac.RbacService;
-import org.crf.security.rbac.starter.user.Permission;
-import org.crf.security.rbac.starter.user.Role;
+import io.github.churunfa.security.exception.rbac.*;
+import io.github.churunfa.security.rbac.starter.service.rbac.RbacService;
+import io.github.churunfa.security.rbac.starter.user.Permission;
+import io.github.churunfa.security.rbac.starter.user.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

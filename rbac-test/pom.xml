@@ -8,7 +8,7 @@
         <version>2.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.crf.security.test</groupId>
+    <groupId>io.github.churunfa.security.test</groupId>
     <artifactId>rbac-test</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>rbac-test</name>
@@ -35,9 +35,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.crf.security</groupId>
+            <groupId>io.github.churunfa</groupId>
             <artifactId>spring-boot-security-rbac-starter</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

@@ -1,12 +1,12 @@
-package org.crf.security.test.rbac;
+package io.github.churunfa.security.test.rbac;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.crf.security.rbac.starter.service.rbac.RbacService;
-import org.crf.security.rbac.starter.user.RbacUser;
-import org.crf.security.test.rbac.pojo.User;
+import io.github.churunfa.security.rbac.starter.service.rbac.RbacService;
+import io.github.churunfa.security.rbac.starter.user.RbacUser;
+import io.github.churunfa.security.test.rbac.pojo.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

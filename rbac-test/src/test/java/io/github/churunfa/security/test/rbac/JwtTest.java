@@ -1,9 +1,8 @@
-package org.crf.security.test.rbac;
+package io.github.churunfa.security.test.rbac;
 
-import io.jsonwebtoken.*;
-import org.crf.security.rbac.starter.dao.RbacUserSecurityDao;
-import org.crf.security.rbac.starter.service.security.TokenManager;
-import org.crf.security.utils.JwtUtils;
+import io.github.churunfa.security.rbac.starter.dao.RbacUserSecurityDao;
+import io.github.churunfa.security.rbac.starter.service.security.TokenManager;
+import io.github.churunfa.security.utils.JwtUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

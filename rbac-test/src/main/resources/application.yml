@@ -6,6 +6,6 @@ spring:
   profiles:
     active: mybatis, jdbc
 #security-rbac:
-#  rbac-user-class-str: org.crf.security.test.rbac.pojo.User
+#  rbac-user-class-str: io.github.churunfa.security.test.rbac.pojo.User
 #  auto-create-root-account: true
 #  uri-prefix: /api/rbac/
