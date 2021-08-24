@@ -1,21 +1,20 @@
 ## spring-security-rbac
 
 # 安装运行
-1.将项目导入idea，将spring-boot-security-rbac-starter-autoconfigure install到本地maven仓库
 
-2.在自己项目中导入坐标
+1.在自己项目中导入坐标
 ```
 <dependency>
-    <groupId>org.crf.security</groupId>
-    <artifactId>spring-boot-security-rbac-starter</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+  <groupId>io.github.churunfa</groupId>
+  <artifactId>spring-boot-security-rbac-starter</artifactId>
+  <version>1.0.0-RELEASE</version>
 </dependency>
 ```
-3.配置redis、mysql、导入spring-boot-starter-web
+2.配置redis、mysql、导入spring-boot-starter-web
 
-4.运行sql文件(public/rbac.sql)，创建rbac基础数据表
+3.运行sql文件(public/rbac.sql)，创建rbac基础数据表
 
-5.启动项目访问http://localhost:8080/rbac
+4.启动项目访问http://localhost:8080/rbac
 
 
 # 使用
