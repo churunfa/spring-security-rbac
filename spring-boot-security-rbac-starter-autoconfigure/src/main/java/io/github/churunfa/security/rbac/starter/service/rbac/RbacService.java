@@ -117,7 +117,7 @@ public interface RbacService {
      * @throws RoleNotFoundException 角色不存在
      * @throws AnonymousRoleDeleteException 匿名用户不允许被删除
      */
-    int cancelUserRole(int uid, int rid) throws RoleNotFoundException, AnonymousRoleDeleteException;
+    int cancelUserRole(int uid, int rid) throws RoleNotFoundException, AnonymousRoleDeleteException, RoleError;
 
     /**
      * 取消角色的某项权限

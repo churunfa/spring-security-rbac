@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(rbacProperties.getAuthWhitelist()).permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(rbacProperties.getUriPrefix() + "/**")
-                .access("@defaultAuAuthRule.hasPermission(request, authentication)");
+                .access("@defaultAuthRule.hasPermission(request, authentication)");
 
         http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(tokenAuthFilter())

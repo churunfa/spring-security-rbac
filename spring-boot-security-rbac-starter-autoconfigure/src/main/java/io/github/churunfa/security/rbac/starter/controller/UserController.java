@@ -1,6 +1,5 @@
 package io.github.churunfa.security.rbac.starter.controller;
 
-import org.apache.ibatis.annotations.Param;
 import io.github.churunfa.security.exception.PermissionException;
 import io.github.churunfa.security.exception.rbac.PermissionNotFoundException;
 import io.github.churunfa.security.rbac.starter.model.RestResult;
@@ -33,6 +32,7 @@ public class UserController {
 
     @GetMapping("info")
     public RestResult info(Authentication authentication) {
+        authentication.getDetails();
         Object user = authentication.getPrincipal();
         return RestResultUtils.success(user);
     }
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @GetMapping("user")
-    public RestResult<PageBean> getUser(@Param("name") String name, @Param("role") String role, @Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize) {
+    public RestResult<PageBean> getUser(@RequestParam("name") String name, @RequestParam("role") String role, @RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize) {
         PageBean<Object> pageBean = new PageBean<>();
         if (pageNo != null) {
             pageBean.setPageNo(pageNo);
@@ -146,6 +146,7 @@ public class UserController {
     }
 
     @PutMapping("cancel/role/{id}")
+    @Transactional
     public RestResult cancelUserRole(@PathVariable("id") Integer uid, @RequestBody Integer[] roles) {
         for (Integer role : roles) {
             try {
@@ -205,7 +206,7 @@ public class UserController {
     }
 
     @GetMapping("permission")
-    public RestResult<PageBean> getPermission(@Param("name") String name, @Param("role") String role, @Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize){
+    public RestResult<PageBean> getPermission(@RequestParam("name") String name, @RequestParam("role") String role, @RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize){
         PageBean<Object> pageBean = new PageBean<>();
         if (pageNo != null) {
             pageBean.setPageNo(pageNo);

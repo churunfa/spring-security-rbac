@@ -11,7 +11,7 @@
 
     <groupId>io.github.churunfa</groupId>
     <artifactId>spring-boot-security-rbac-starter-autoconfigure</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.2</version>
 
     <packaging>jar</packaging>
 

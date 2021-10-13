@@ -1,6 +1,6 @@
 package io.github.churunfa.security.test.rbac;
 
-import io.github.churunfa.security.rbac.starter.service.security.DefaultAuAuthRule;
+import io.github.churunfa.security.rbac.starter.service.security.DefaultAuthRule;
 import io.github.churunfa.security.rbac.starter.user.RbacUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class InvokeTest {
     }
 
     @Autowired
-    DefaultAuAuthRule defaultAuAuthRule;
+    DefaultAuthRule defaultAuAuthRule;
 
     @Test
     void getStrTest() throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {

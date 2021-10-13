@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 
 @Service
-public class DefaultAuAuthRule {
+public class DefaultAuthRule {
 
     private final RbacProperties rbacProperties;
 
@@ -33,7 +33,7 @@ public class DefaultAuAuthRule {
 
     private final RbacService rbacService;
 
-    public DefaultAuAuthRule(RbacProperties rbacProperties, RbacUserSecurityDao rbacUserSecurityDao, RbacService rbacService) {
+    public DefaultAuthRule(RbacProperties rbacProperties, RbacUserSecurityDao rbacUserSecurityDao, RbacService rbacService) {
         this.rbacProperties = rbacProperties;
         this.rbacUserSecurityDao = rbacUserSecurityDao;
         this.rbacService = rbacService;
@@ -112,7 +112,7 @@ public class DefaultAuAuthRule {
 
             boolean isJson = false;
             Map<String, Object> loginData = null;
-            if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType()) || MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType()) || MediaType.APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(request.getContentType())) {
+            if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType()) || MediaType.APPLICATION_JSON_UTF8_VALUE.equalsIgnoreCase(request.getContentType())) {
                 isJson = true;
                 try {
                     loginData = new ObjectMapper().readValue(request.getInputStream(), Map.class);

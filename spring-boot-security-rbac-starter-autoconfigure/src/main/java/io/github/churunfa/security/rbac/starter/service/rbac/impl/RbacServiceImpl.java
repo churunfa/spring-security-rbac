@@ -216,7 +216,7 @@ public class RbacServiceImpl implements RbacService {
     }
 
     @Override
-    public int cancelUserRole(int uid, int rid) throws RoleNotFoundException, AnonymousRoleDeleteException {
+    public int cancelUserRole(int uid, int rid) throws RoleNotFoundException, AnonymousRoleDeleteException, RoleError {
         String key = "rbac::authorities::" + uid;
         redisTemplate.delete(key);
         Role role = roleMapper.getRoleById(rid);
@@ -226,6 +226,13 @@ public class RbacServiceImpl implements RbacService {
 
         if ("ANONYMOUS".equals(role.getName())) {
             throw new AnonymousRoleDeleteException("匿名角色禁止被删除");
+        }
+
+        if ("root".equals(role.getName())) {
+            int count = roleMapper.countRoleOnUser(role.getId());
+            if (count == 1) {
+                throw new RoleError("禁止删除最后一个root角色");
+            }
         }
 
         return permissionMapper.deleteRoleOnUser(uid, rid);
@@ -380,6 +387,10 @@ public class RbacServiceImpl implements RbacService {
             throw new RuntimeException("anonymousUser为匿名用户，不允许修改。");
         }
 
+        if (!isNull(username) && "root".equals(user.getUsername())) {
+            throw new RuntimeException("root用户，不允许修改用户名。");
+        }
+
         updateSecret(username);
         if (!isNull(username)) {
             rbacUserSecurityDao.updateUserName(id, username);
@@ -404,6 +415,9 @@ public class RbacServiceImpl implements RbacService {
         if ("anonymousUser".equals(user.getUsername())) {
             throw new RuntimeException("anonymousUser为匿名用户，不允许修改。");
         }
+        if ("root".equals(user.getUsername())) {
+            throw new RuntimeException("root用户不允许修改。");
+        }
         return rbacUserSecurityDao.updateAccountNonExpired(id, accountNonExpired);
     }
 
@@ -413,6 +427,9 @@ public class RbacServiceImpl implements RbacService {
         if ("anonymousUser".equals(user.getUsername())) {
             throw new RuntimeException("anonymousUser为匿名用户，不允许修改。");
         }
+        if ("root".equals(user.getUsername())) {
+            throw new RuntimeException("root用户不允许修改。");
+        }
         return rbacUserSecurityDao.updateAccountNonLocked(id, accountNonLocked);
     }
 
@@ -421,6 +438,9 @@ public class RbacServiceImpl implements RbacService {
         RbacUser user = rbacUserSecurityDao.getUserById(id);
         if ("anonymousUser".equals(user.getUsername())) {
             throw new RuntimeException("anonymousUser为匿名用户，不允许修改。");
+        }
+        if ("root".equals(user.getUsername())) {
+            throw new RuntimeException("root用户不允许修改。");
         }
         return rbacUserSecurityDao.updateEnabled(id, enabled);
     }
@@ -586,7 +606,7 @@ public class RbacServiceImpl implements RbacService {
         }
 
         Permission permissionByName = permissionMapper.getPermissionByName(permission.getName());
-        if (permissionByName != null) {
+        if (permissionByName.getId() != permission.getId() && permissionByName != null) {
             throw new PermissionIsExist("权限名已存在，更新失败");
         }
 

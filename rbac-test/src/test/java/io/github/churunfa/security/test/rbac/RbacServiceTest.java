@@ -76,7 +76,7 @@ public class RbacServiceTest {
     }
 
     @Test
-    void cancelUserRole() throws RoleNotFoundException, AnonymousRoleDeleteException {
+    void cancelUserRole() throws RoleNotFoundException, AnonymousRoleDeleteException, RoleError {
         rbacService.cancelUserRole(5, 5);
     }
 

@@ -155,14 +155,14 @@ public class RbacUserSecurityDaoImpl implements RbacUserSecurityDao {
     @Override
     public List listUserByUerNameAndRoleName(String userName, String roleName, int st, int limit) {
         userName += "%";
-        String sql = String.format("select `user`.* from `user` left join user_permission_role on (`user`.id = user_id) where type = 'role' and name = ? and username like ? limit ?, ?");
+        String sql = String.format("select `%s`.* from `user` left join user_permission_role on (`%s`.id = user_id) where type = 'role' and name = ? and username like ? limit ?, ?", rbacProperties.getUserTableName(), rbacProperties.getUserTableName());
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(rbacProperties.getRbacUserClass()),roleName, userName, st, limit);
     }
 
     @Override
     public int countUserByUerNameAndRoleName(String userName, String roleName) {
         userName += "%";
-        String sql = String.format("select count(*) from `user` left join user_permission_role on (`user`.id = user_id) where type = 'role' and name = ? and username like ?");
+        String sql = String.format("select count(*) from `%s` left join user_permission_role on (`%s`.id = user_id) where type = 'role' and name = ? and username like ?", rbacProperties.getUserTableName(), rbacProperties.getUserTableName());
         return jdbcTemplate.queryForObject(sql, Integer.class,roleName, userName);
     }
 
