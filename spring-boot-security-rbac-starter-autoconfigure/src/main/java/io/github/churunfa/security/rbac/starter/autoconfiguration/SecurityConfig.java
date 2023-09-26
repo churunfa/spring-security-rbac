@@ -71,10 +71,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.exceptionHandling().authenticationEntryPoint(new UnAuthEntryPoint());
 
+        String matchUrl = rbacProperties.getUriPrefix();
+        if (matchUrl.length() > 0) {
+            if (matchUrl.endsWith("/")) {
+                matchUrl += "**";
+            } else {
+                matchUrl += "/**";
+            }
+        }
+
         http.authorizeRequests()
                 .antMatchers(rbacProperties.getAuthWhitelist()).permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers(rbacProperties.getUriPrefix() + "/**")
+                .antMatchers(matchUrl)
                 .access("@defaultAuthRule.hasPermission(request, authentication)");
 
         http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class)
